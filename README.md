@@ -19,3 +19,5 @@ This is a simple weather application built using React and Axios. It fetches wea
 
 1. Enter a location in the search bar and press Enter.
 2. The app will fetch the weather data from the API and display it on the screen.
+
+![Screenshot](screenshot/Screenshot.png)
