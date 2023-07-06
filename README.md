@@ -27,3 +27,5 @@ https://react-weather-app-pied-six.vercel.app/
 ## Image of App
 
 ![Screenshot](screenshot/Screenshot.png)
+
+![Screenshot](screenshot/Screenshot2.png)
