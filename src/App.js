@@ -1,22 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 
 function App() {
 
   const[data,setData]=useState({})
 const[location,setLocation]=useState('')
+const[temperatureUnit, setTemperatureUnit]=useState('metric')
 
-  const url=(`https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=006862ab30cd6d9df3e8031ebdf10b0d`)
-  
-  const searchLocation=(event)=>{
-    if(event.key==="Enter"){
-    axios.get(url).then((response)=>{
-      setData(response.data)
-      console.log(response.data)
-    })
-    setLocation("")
+useEffect(() => {
+  const fetchData = async () => {
+    if (location) {
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=${temperatureUnit}&appid=006862ab30cd6d9df3e8031ebdf10b0d`;
+      try {
+        const response = await axios.get(url);
+        setData(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  fetchData();
+}, [location, temperatureUnit]);
+
+const searchLocation = (event) => {
+  if (event.key === 'Enter') {
+    setLocation(event.target.value);
   }
-}
+};
+
+const handleUnitChange = (unit) => {
+  setTemperatureUnit(unit);
+};
+
   return (
    <div className="app">
     <div className="search">
@@ -26,13 +43,26 @@ const[location,setLocation]=useState('')
       placeholder='Enter Location'
       type="text"/>
     </div>
+    <div className="buttons">
+  <button onClick={() => handleUnitChange('metric')}>Celsius</button>
+  <button onClick={() => handleUnitChange('imperial')}>Fahrenheit</button>
+  <button onClick={() => handleUnitChange('standard')}>Kelvin</button>
+</div>
 <div className="container">
   <div className="top">
     <div className="location">
       <p>{data.name}</p>
     </div>
     <div className="temp">
-      {data.main?<h1>{data.main.temp.toFixed()}°C</h1>:null}
+    {data.main ? (
+  <h1>
+    {temperatureUnit === 'metric'
+      ? `${data.main.temp.toFixed()}°C`
+      : temperatureUnit === 'imperial'
+      ? `${data.main.temp.toFixed()}°F`
+      : `${data.main.temp.toFixed()} K`}
+  </h1>
+) : null}
     </div>
     <div className="description">
       {data.weather?<p>{data.weather[0].description}</p>:null}
